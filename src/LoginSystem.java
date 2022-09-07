@@ -1,21 +1,39 @@
 public class LoginSystem extends LoginSystemBase {
 
+    // Class for storing user information
+    private class User {
+        private String email;
+        private int passwordHash;
+
+        public User(String email, int passwordHash) {
+            this.email = email;
+            this.passwordHash = passwordHash;
+        }
+    }
+
+    User hashtable[] = new User[101];
+    int numUsers = 0;
+
     @Override
     public int size() {
-        /* Add your code here! */
-        return 0;
+        return hashtable.length;
     }
 
     @Override
     public int getNumUsers() {
-        /* Add your code here! */
-        return 0;
+        return numUsers;
     }
 
     @Override
     public int hashCode(String key) {
-        /* Add your code here! */
-        return 0;
+        int hashCode = key.charAt(0);
+
+        for (int i = 1; i < key.length(); i++) {
+            hashCode *= 31;
+            hashCode += key.charAt(i);
+        }
+
+        return hashCode;
     }
 
     @Override
@@ -42,7 +60,14 @@ public class LoginSystem extends LoginSystemBase {
         return false;
     }
 
-    /* Add any extra functions below */
+    /**
+     * Compressed the hashcode.
+     * @param hashCode hashcode to compress.
+     * @return compressed hashcode.
+     */
+    public int compressHash(int hashCode) {
+        return hashCode % this.size();
+    }
 
     public static void main(String[] args) {
         /*
