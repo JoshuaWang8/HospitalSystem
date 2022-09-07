@@ -9,6 +9,14 @@ public class LoginSystem extends LoginSystemBase {
             this.email = email;
             this.passwordHash = passwordHash;
         }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public int getPasswordHash() {
+            return passwordHash;
+        }
     }
 
     User hashtable[] = new User[101];
@@ -38,8 +46,31 @@ public class LoginSystem extends LoginSystemBase {
 
     @Override
     public boolean addUser(String email, String password) {
-        /* Add your code here! */
-        return false;
+        // Triple size of hashtable if not enough space
+        if (numUsers == this.size()) {
+            User newHashtable[] = new User[numUsers * 3];
+
+            // Copy over existing users
+            for (int i = 0; i < numUsers; i++) {
+                newHashtable[i] = this.hashtable[i];
+            }
+        }
+
+        // Search for user in the system
+        int index = this.compressHash(this.hashCode(email));
+
+        // Keep searching while there are entries in the hashtable
+        while (this.hashtable[index] != null) {
+            // Check emails match (in case there are hash collisions)
+            if (this.hashtable[index].getEmail().equals(email)) {
+                return false;
+            }
+            index = compressHash(index + 1);
+        }
+
+        // Add user into hashtable if we have found a suitable position
+        this.hashtable[index] = new User(email, this.hashCode(password));
+        return true;
     }
 
     @Override
@@ -69,6 +100,25 @@ public class LoginSystem extends LoginSystemBase {
         return hashCode % this.size();
     }
 
+    /**
+     * Search for a specific user in the system.
+     * @param email email of user to search for.
+     * @return -1 if user not found. Index where user is stored in the hashtable.
+     */
+    public int searchUsers(String email) {
+        int index = this.hashCode(email);
+
+        // Keep searching while there are entries in the hashtable
+        while (this.hashtable[index] != null) {
+            // Check emails match (in case there are hash collisions)
+            if (this.hashtable[index].getEmail().equals(email)) {
+                return index;
+            }
+            index = compressHash(index + 1);
+        }
+        return -1;
+    }
+    
     public static void main(String[] args) {
         /*
          * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
