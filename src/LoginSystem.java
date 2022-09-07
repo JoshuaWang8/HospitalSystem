@@ -1,8 +1,8 @@
 public class LoginSystem extends LoginSystemBase {
 
     // Class for storing user information
-    private class User {
-        private String email;
+    private static class User {
+        private final String email;
         private int passwordHash;
 
         public User(String email, int passwordHash) {
@@ -54,6 +54,7 @@ public class LoginSystem extends LoginSystemBase {
             for (int i = 0; i < numUsers; i++) {
                 newHashtable[i] = this.hashtable[i];
             }
+            this.hashtable = newHashtable;
         }
 
         // Search for user in the system
@@ -75,20 +76,48 @@ public class LoginSystem extends LoginSystemBase {
 
     @Override
     public boolean removeUser(String email, String password) {
-        /* Add your code here! */
+        int index = this.searchUsers(email);
+
+        // Check user exists
+        if (index == -1) {
+            return false;
+        } else {
+            // Check passwords match
+            if (this.hashtable[index].getPasswordHash() == this.hashCode(password)) {
+                this.hashtable[index] = null;
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public int checkPassword(String email, String password) {
-        /* Add your code here! */
-        return 0;
+        int index = this.searchUsers(email);
+
+        if (index > -1) {
+            // Check passwords match
+            if (this.hashtable[index].getPasswordHash() == this.hashCode(password)) {
+                return index;
+            } else {
+                return -2;
+            }
+        }
+        return -1;
     }
 
     @Override
     public boolean changePassword(String email, String oldPassword, String newPassword) {
-        /* Add your code here! */
-        return false;
+        int index = this.searchUsers(email);
+
+        if (index != -1) {
+            // Set new password if old password given is correct
+            if (this.hashtable[index].getPasswordHash() == this.hashCode(oldPassword)) {
+                this.hashtable[index].passwordHash = this.hashCode(newPassword);
+                return true;
+            }
+        }
+        return false; // User not found or oldPassword incorrect
     }
 
     /**
@@ -118,7 +147,7 @@ public class LoginSystem extends LoginSystemBase {
         }
         return -1;
     }
-    
+
     public static void main(String[] args) {
         /*
          * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
