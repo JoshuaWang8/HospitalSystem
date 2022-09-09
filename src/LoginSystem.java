@@ -100,6 +100,7 @@ public class LoginSystem extends LoginSystemBase {
             if (this.hashtable[index].getPasswordHash() == this.hashCode(password)) {
                 // Set user to be "deleted" from system so that linear probing search will still work properly
                 this.hashtable[index].setDeleted();
+                this.numUsers -= 1;
                 return true;
             }
         }
