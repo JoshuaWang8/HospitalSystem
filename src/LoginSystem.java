@@ -4,23 +4,37 @@ public class LoginSystem extends LoginSystemBase {
     private static class User {
         private final String email;
         private int passwordHash;
+        private boolean deleted;
 
         public User(String email, int passwordHash) {
             this.email = email;
             this.passwordHash = passwordHash;
+            this.deleted = false; // Not deleted by default
         }
 
+        /** Return email of the user. */
         public String getEmail() {
             return email;
         }
 
+        /** Return hashed password of the user. */
         public int getPasswordHash() {
             return passwordHash;
         }
+
+        /** Return whether the user has been deleted from the system. */
+        public boolean isDeleted() {
+            return deleted;
+        }
+
+        /** Set a user to be deleted from the system. */
+        public void setDeleted() {
+            this.deleted = true;
+        }
     }
 
-    User hashtable[] = new User[101];
-    int numUsers = 0;
+    private User hashtable[] = new User[101];
+    private int numUsers = 0;
 
     @Override
     public int size() {
@@ -60,8 +74,8 @@ public class LoginSystem extends LoginSystemBase {
         // Search for user in the system
         int index = this.compressHash(this.hashCode(email));
 
-        // Keep searching while there are entries in the hashtable
-        while (this.hashtable[index] != null) {
+        // Keep searching while there are entries in the hashtable and the entries are not "deleted"
+        while ((this.hashtable[index] != null) && !(this.hashtable[index].isDeleted())) {
             // Check emails match (in case there are hash collisions)
             if (this.hashtable[index].getEmail().equals(email)) {
                 return false;
@@ -69,22 +83,23 @@ public class LoginSystem extends LoginSystemBase {
             index = compressHash(index + 1);
         }
 
-        // Add user into hashtable if we have found a suitable position
+        // Add user into hashtable if we have found a suitable position (will replace deleted records if one exists)
         this.hashtable[index] = new User(email, this.hashCode(password));
+        this.numUsers += 1;
         return true;
     }
 
     @Override
     public boolean removeUser(String email, String password) {
         int index = this.searchUsers(email);
-
         // Check user exists
         if (index == -1) {
             return false;
         } else {
             // Check passwords match
             if (this.hashtable[index].getPasswordHash() == this.hashCode(password)) {
-                this.hashtable[index] = null;
+                // Set user to be "deleted" from system so that linear probing search will still work properly
+                this.hashtable[index].setDeleted();
                 return true;
             }
         }
@@ -135,13 +150,17 @@ public class LoginSystem extends LoginSystemBase {
      * @return -1 if user not found. Index where user is stored in the hashtable.
      */
     public int searchUsers(String email) {
-        int index = this.hashCode(email);
+        int index = compressHash(this.hashCode(email));
 
         // Keep searching while there are entries in the hashtable
-        while (this.hashtable[index] != null) {
+        while ((this.hashtable[index] != null)) {
             // Check emails match (in case there are hash collisions)
             if (this.hashtable[index].getEmail().equals(email)) {
-                return index;
+                if (this.hashtable[index].isDeleted()) {
+                    return -1;
+                } else {
+                    return index;
+                }
             }
             index = compressHash(index + 1);
         }
