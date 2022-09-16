@@ -55,20 +55,23 @@ public class Hospital1Test {
         var patient2 = new Patient("Alex", "08:00");
         assertFalse(hospital1.addPatient(patient2));
 
-        // Inserting into a time that is not within work hours (before 08:00 or after 18:00)
+        // Inserting into a time that is not within work hours (before 08:00 or on/after 18:00)
         var patient3 = new Patient("George", "07:00");
         assertFalse(hospital1.addPatient(patient3));
 
-        var patient4 = new Patient("Adam", "20:00");
+        var patient4 = new Patient("Adam", "18:00");
         assertFalse(hospital1.addPatient(patient4));
 
-        // Inserting a time during lunch break
-        var patient5 = new Patient("Max", "12:20");
+        var patient5 = new Patient("Charles", "20:00");
         assertFalse(hospital1.addPatient(patient5));
 
-        // Inserting a time with incorrect minutes (not 00, 20 or 40)
-        var patient6 = new Patient("Zac", "13:30");
+        // Inserting a time during lunch break
+        var patient6 = new Patient("Max", "12:20");
         assertFalse(hospital1.addPatient(patient6));
+
+        // Inserting a time with incorrect minutes (not 00, 20 or 40)
+        var patient7 = new Patient("Zac", "13:30");
+        assertFalse(hospital1.addPatient(patient7));
 
         // Check iterator is correct
         assertTrue(iterator.hasNext());

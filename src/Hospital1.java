@@ -8,7 +8,7 @@ public class Hospital1 extends HospitalBase {
     private PatientBase appointments[];
 
     public Hospital1() {
-        appointments = new PatientBase[30];
+        appointments = new PatientBase[27];
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Hospital1 extends HospitalBase {
         int minutes = Integer.parseInt(timeParts[1]);
 
         // Check times are valid (during work hours and not during lunch times)
-        if ((hour < 8) || (hour > 18) || (hour == 12)) {
+        if ((hour < 8) || (hour > 17) || (hour == 12)) {
             return false;
         }
 
