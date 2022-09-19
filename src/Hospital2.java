@@ -3,20 +3,61 @@ import java.util.Objects;
 
 public class Hospital2 extends HospitalBase {
 
+    /** Pointer to the head of the linked list of appointments. */
+    Node head;
+
+    /** Node for the linked list. */
+    class Node {
+        Patient patient;
+        Node next;
+
+        public Node(Patient patient) {
+            this.patient = patient;
+        }
+    }
+
     public Hospital2() {
-        /* Add your code here! */
+        this.head = null;
     }
 
     @Override
     public boolean addPatient(PatientBase patient) {
-        /* Add your code here! */
-        return false;
+        Node newPatient = new Node((Patient) patient);
+
+        // Add new node to correct position in linked list
+        if (head == null) {
+            head = newPatient;
+        } else {
+            Node current = this.head;
+            while ((current.next != null) && (current.patient.compareTo(newPatient.patient) < 0)) {
+                current = current.next;
+            }
+            current.next = newPatient;
+        }
+        return true;
     }
 
     @Override
     public Iterator<PatientBase> iterator() {
-        /* Add your code here! */
-        return null;
+        Node head = this.head;
+
+        Iterator<PatientBase> it = new Iterator<>() {
+            Node current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public Patient next() {
+                Patient nextPatient = current.patient;
+                current = current.next; // Move to the next node to read
+                return nextPatient;
+            }
+        };
+
+        return it;
     }
 
     /* Add any extra functions below */
