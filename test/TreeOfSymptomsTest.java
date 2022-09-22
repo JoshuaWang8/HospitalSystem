@@ -194,4 +194,105 @@ public class TreeOfSymptomsTest {
         correctPostOrder.add(redEyes);
         assertEquals(correctPostOrder, postOrder);
     }
+
+    @Test
+    public void testRestructureComplexTree() {
+        Symptom redEyes = new Symptom("Red Eyes", 1);
+        Symptom runnyNose = new Symptom("Runny Nose", 2);
+        Symptom cough = new Symptom("Cough", 3);
+        Symptom headache = new Symptom("Headache", 4);
+        Symptom fatigue = new Symptom("Fatigue", 5);
+        Symptom fever = new Symptom("Fever", 6);
+        Symptom vomiting = new Symptom("Vomiting", 7);
+        redEyes.setLeft(runnyNose);
+        redEyes.setRight(cough);
+        runnyNose.setRight(headache);
+        headache.setLeft(fatigue);
+        cough.setLeft(fever);
+        cough.setRight(vomiting);
+        tree = new TreeOfSymptoms(redEyes);
+
+        ArrayList<SymptomBase> inOrder;
+        ArrayList<SymptomBase> correctInOrder;
+        ArrayList<SymptomBase> postOrder;
+        ArrayList<SymptomBase> correctPostOrder;
+
+        // Restructure based on a threshold lower than available
+        tree.restructureTree(0);
+
+        inOrder = tree.inOrderTraversal();
+        correctInOrder = new ArrayList<>();
+        correctInOrder.add(redEyes);
+        correctInOrder.add(runnyNose);
+        correctInOrder.add(cough);
+        correctInOrder.add(headache);
+        correctInOrder.add(fatigue);
+        correctInOrder.add(fever);
+        correctInOrder.add(vomiting);
+
+        postOrder = tree.postOrderTraversal();
+        correctPostOrder = new ArrayList<>();
+        correctPostOrder.add(cough);
+        correctPostOrder.add(runnyNose);
+        correctPostOrder.add(headache);
+        correctPostOrder.add(vomiting);
+        correctPostOrder.add(fever);
+        correctPostOrder.add(fatigue);
+        correctPostOrder.add(redEyes);
+
+        assertEquals(correctInOrder, inOrder);
+        assertEquals(correctPostOrder, postOrder);
+
+        // Restructure based on a threshold larger than available
+        tree.restructureTree(10);
+
+        inOrder = tree.inOrderTraversal();
+        correctInOrder = new ArrayList<>();
+        correctInOrder.add(redEyes);
+        correctInOrder.add(runnyNose);
+        correctInOrder.add(cough);
+        correctInOrder.add(headache);
+        correctInOrder.add(fatigue);
+        correctInOrder.add(fever);
+        correctInOrder.add(vomiting);
+
+        postOrder = tree.postOrderTraversal();
+        correctPostOrder = new ArrayList<>();
+        correctPostOrder.add(redEyes);
+        correctPostOrder.add(runnyNose);
+        correctPostOrder.add(fatigue);
+        correctPostOrder.add(fever);
+        correctPostOrder.add(headache);
+        correctPostOrder.add(cough);
+        correctPostOrder.add(vomiting);
+
+        assertEquals(correctInOrder, inOrder);
+        assertEquals(correctPostOrder, postOrder);
+
+        // Restructure based on a threshold in the middle of smallest and largest severities
+        tree.restructureTree(4);
+
+        inOrder = tree.inOrderTraversal();
+        correctInOrder = new ArrayList<>();
+        correctInOrder.add(redEyes);
+        correctInOrder.add(runnyNose);
+        correctInOrder.add(cough);
+        correctInOrder.add(headache);
+        correctInOrder.add(fatigue);
+        correctInOrder.add(fever);
+        correctInOrder.add(vomiting);
+
+        postOrder = tree.postOrderTraversal();
+        correctPostOrder = new ArrayList<>();
+        correctPostOrder.add(cough);
+        correctPostOrder.add(runnyNose);
+        correctPostOrder.add(redEyes);
+        correctPostOrder.add(vomiting);
+        correctPostOrder.add(fever);
+        correctPostOrder.add(fatigue);
+        correctPostOrder.add(headache);
+
+        assertEquals(correctInOrder, inOrder);
+        assertEquals(correctPostOrder, postOrder);
+    }
 }
