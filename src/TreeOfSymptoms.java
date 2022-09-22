@@ -43,7 +43,7 @@ public class TreeOfSymptoms extends TreeOfSymptomsBase {
 	@Override
 	public void restructureTree(int severity) {
 		// Get a list of all nodes in the tree
-		ArrayList<SymptomBase> symptoms = inOrderTraversal();
+		ArrayList<SymptomBase> symptoms = this.inOrderTraversal();
 		Collections.sort(symptoms);
 		int i = 0;
 		SymptomBase newRoot = symptoms.get(0);
@@ -60,20 +60,23 @@ public class TreeOfSymptoms extends TreeOfSymptomsBase {
 			}
 		}
 
+		// Traverse tree again since inserting according to sorted list of nodes will make tree very unbalanced.
+		// Use post-order traversal since if tree is sorted already, then in-order traversal will keep it sorted.
+		ArrayList<SymptomBase> symptomsToAdd = this.postOrderTraversal();
+
 		// Reset left and right pointers for each node
-		for (SymptomBase symptom : symptoms) {
+		for (SymptomBase symptom : symptomsToAdd) {
 			symptom.setLeft(null);
 			symptom.setRight(null);
 		}
 
-		// Reset root of the tree and remove it from list of symptoms
+		// Reset root of the tree and remove it from list of symptoms to add into tree
 		this.setRoot(newRoot);
-		symptoms.remove(newRoot);
+		symptomsToAdd.remove(newRoot);
 
-		for (SymptomBase newSymptom : symptoms) {
+		for (SymptomBase newSymptom : symptomsToAdd) {
 			this.insertSymptom(newRoot, newSymptom);
 		}
-
 	}
 
 	/**
