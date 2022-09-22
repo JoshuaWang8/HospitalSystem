@@ -12,22 +12,33 @@ public class LoginSystem extends LoginSystemBase {
             this.deleted = false; // Not deleted by default
         }
 
-        /** Return email of the user. */
+        /**
+         * Gets the plaintext email.
+         * @return Email of the user.
+         */
         public String getEmail() {
             return email;
         }
 
-        /** Return hashed password of the user. */
+        /**
+         * Return hashed password of the user.
+         * @return Hash code of user's password.
+         */
         public int getPasswordHash() {
             return passwordHash;
         }
 
-        /** Return whether the user has been deleted from the system. */
+        /**
+         * Check whether a user has been deleted from the system.
+         * @return True if user has been deleted, false otherwise.
+         */
         public boolean isDeleted() {
             return deleted;
         }
 
-        /** Set a user to be deleted from the system. */
+        /**
+         * Set a user to be deleted from the system.
+         */
         public void setDeleted() {
             this.deleted = true;
         }
@@ -60,18 +71,22 @@ public class LoginSystem extends LoginSystemBase {
 
     @Override
     public boolean addUser(String email, String password) {
-        // Triple size of hashtable if not enough space
+        // Triple size of hashmap if not enough space
         if (numUsers == this.size()) {
             User newHashtable[] = new User[numUsers * 3];
 
-            // Copy over existing users
+            // Take existing users (who have not been deleted) and insert them into correct indexes of new hashmap
             for (int i = 0; i < numUsers; i++) {
-                newHashtable[i] = this.hashtable[i];
+                User user = this.hashtable[i];
+                if (!(user.isDeleted()) && (user != null)) {
+                    newHashtable[this.hashCode(user.getEmail()) % (numUsers * 3)] = user;
+                }
             }
             this.hashtable = newHashtable;
         }
 
-        // Search for user in the system
+        // Search for next suitable index to add user into, and check if user is already in the system if there is
+        // a hash collision
         int index = this.compressHash(this.hashCode(email));
 
         // Keep searching while there are entries in the hashtable and the entries are not "deleted"
@@ -152,6 +167,7 @@ public class LoginSystem extends LoginSystemBase {
      */
     public int searchUsers(String email) {
         int index = compressHash(this.hashCode(email));
+        int startIndex = index;
 
         // Keep searching while there are entries in the hashtable
         while ((this.hashtable[index] != null)) {
@@ -164,6 +180,11 @@ public class LoginSystem extends LoginSystemBase {
                 }
             }
             index = compressHash(index + 1);
+
+            // Stop searching if we have returned to starting position
+            if (index == startIndex) {
+                return -1;
+            }
         }
         return -1;
     }
