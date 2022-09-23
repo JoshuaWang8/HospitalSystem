@@ -1,10 +1,9 @@
 import java.util.Iterator;
-import java.util.Objects;
 
 public class Hospital3 extends HospitalBase {
 
     /** Linked list of appointments. */
-    LinkedList appointments;
+    private LinkedList appointments;
 
     /** Node for the linked list. */
     class Node {

@@ -28,6 +28,4 @@ public class Patient extends PatientBase {
             }
         }
     }
-
-    /* Add any extra functions below */
 }
