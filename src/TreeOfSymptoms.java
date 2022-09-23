@@ -125,37 +125,4 @@ public class TreeOfSymptoms extends TreeOfSymptomsBase {
 		getPostOrder((Symptom) symptom.getRight(), list);
 		list.add(symptom);
 	}
-
-	public static void main(String[] args) {
-		/*
-		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		 * REMOVE THE MAIN METHOD BEFORE SUBMITTING TO THE AUTOGRADER
-		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		 * The following main method is provided for simple debugging only
-		 */
-		var cough = new Symptom("Cough", 3);
-		var fever = new Symptom("Fever", 6);
-		var redEyes = new Symptom("Red Eyes", 1);
-
-		redEyes.setLeft(cough);
-		redEyes.setRight(fever);
-
-		var tree = new TreeOfSymptoms(redEyes);
-		var inOrderTraversal = tree.inOrderTraversal();
-		var correctTraversal = new Symptom[] { cough, redEyes, fever };
-		int i = 0;
-		for (var patient : inOrderTraversal) {
-			assert Objects.equals(patient, correctTraversal[i++]);
-		}
-		assert tree.getRoot() == redEyes;
-
-		tree.restructureTree(2);
-		inOrderTraversal = tree.inOrderTraversal();
-		correctTraversal = new Symptom[] { redEyes, cough, fever};
-		i = 0;
-		for (var patient : inOrderTraversal) {
-			assert Objects.equals(patient, correctTraversal[i++]);
-		}
-		assert tree.getRoot() == cough;
-	}
 }
