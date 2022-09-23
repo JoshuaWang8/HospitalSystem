@@ -140,7 +140,7 @@ public class Hospital3 extends HospitalBase {
                     sortedList.tail = list.tail;
                 } else {
                     sortedList.tail.next = list.head;
-                    sortedList.tail = list.head;
+                    sortedList.tail = list.tail;
                 }
             }
         }
