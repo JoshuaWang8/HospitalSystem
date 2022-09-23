@@ -24,21 +24,25 @@ public class Hospital1Test {
     /** Test inserting patients into the system. */
     @Test
     public void testValidEntries() {
-        var patient1 = new Patient("Bob", "08:00");
+        var patient1 = new Patient("Bob", "11:00");
         assertTrue(hospital1.addPatient(patient1));
-        var patient2 = new Patient("Adam", "08:20");
+        var patient2 = new Patient("Adam", "13:20");
         assertTrue(hospital1.addPatient(patient2));
         var patient3 = new Patient("Max", "08:40");
         assertTrue(hospital1.addPatient(patient3));
-        var patient4 = new Patient("George", "11:00");
+        var patient4 = new Patient("George", "17:40");
         assertTrue(hospital1.addPatient(patient4));
+        var patient5 = new Patient("Zac", "13:00");
+        assertTrue(hospital1.addPatient(patient5));
 
+        assertTrue(iterator.hasNext());
+        assertEquals(patient3, iterator.next());
         assertTrue(iterator.hasNext());
         assertEquals(patient1, iterator.next());
         assertTrue(iterator.hasNext());
-        assertEquals(patient2, iterator.next());
+        assertEquals(patient5, iterator.next());
         assertTrue(iterator.hasNext());
-        assertEquals(patient3, iterator.next());
+        assertEquals(patient2, iterator.next());
         assertTrue(iterator.hasNext());
         assertEquals(patient4, iterator.next());
         assertFalse(iterator.hasNext());
