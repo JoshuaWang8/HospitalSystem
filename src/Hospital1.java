@@ -52,7 +52,17 @@ public class Hospital1 extends HospitalBase {
 
             @Override
             public boolean hasNext() {
-                return currentIndex < appointments.length && appointments[currentIndex] != null;
+                // Search for next existing patient
+                while ((currentIndex < appointments.length) && (appointments[currentIndex] == null)) {
+                    currentIndex++;
+                }
+
+                // No more patients if search has reached end of list
+                if (currentIndex == appointments.length) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
 
             @Override
