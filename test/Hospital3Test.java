@@ -32,6 +32,8 @@ public class Hospital3Test {
         assertTrue(hospital3.addPatient(patient4));
         var patient5 = new Patient("Zac", "08:00");
         assertTrue(hospital3.addPatient(patient5));
+        var patient6 = new Patient("Greg", "13:58");
+        assertTrue(hospital3.addPatient(patient6));
 
         Iterator<PatientBase> iterator = hospital3.iterator();
         assertTrue(iterator.hasNext());
@@ -42,6 +44,8 @@ public class Hospital3Test {
         assertEquals(patient3, iterator.next());
         assertTrue(iterator.hasNext());
         assertEquals(patient4, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(patient6, iterator.next());
         assertTrue(iterator.hasNext());
         assertEquals(patient2, iterator.next());
         assertFalse(iterator.hasNext());
